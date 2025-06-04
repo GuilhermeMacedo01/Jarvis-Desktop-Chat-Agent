@@ -37,6 +37,7 @@ class UserProfile:
     
     def update_profile(self, name=None, stack=None, interests=None):
         """Update profile with new information"""
+        
         if name is not None:
             self.name = name
         if stack is not None:
