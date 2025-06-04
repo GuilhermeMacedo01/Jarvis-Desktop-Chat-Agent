@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import (
     QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
     QPushButton, QTextEdit, QLineEdit, QLabel, QSplitter,
-    QMessageBox
+    QMessageBox, QTextBrowser
 )
 from PySide6.QtCore import Qt
 import logging
@@ -50,8 +50,8 @@ class MainWindow(QMainWindow):
         self.profile_label = QLabel(f"Olá, {self.profile.name or 'usuário'}!")
         main_content_layout.addWidget(self.profile_label)
 
-        self.news_area = QTextEdit()
-        self.news_area.setReadOnly(True)
+        self.news_area = QTextBrowser()
+        self.news_area.setOpenExternalLinks(True)
         main_content_layout.addWidget(self.news_area)
         self.refresh_news_btn = QPushButton("Atualizar notícias")
         main_content_layout.addWidget(self.refresh_news_btn)
@@ -138,10 +138,11 @@ class MainWindow(QMainWindow):
             news = self.news_fetcher.fetch_and_summarize()
             self.news_area.clear()
             for item in news:
-                self.news_area.append(f"<h3>{item['title']}</h3>")
-                self.news_area.append(f"<p>{item['summary']}</p>")
-                self.news_area.append(f"<a href='{item['url']}'>Leia mais</a>")
-                self.news_area.append("<hr>")
+                title_link = f'<a href="{item["url"]}" style="color: #0066cc; text-decoration: none;">{item["title"]}</a>'
+                self.news_area.append(f"<h3>{title_link}</h3>")
+                self.news_area.append(f"<p style='margin: 10px 0;'>{item['summary']}</p>")
+                self.news_area.append(f"<p style='margin: 5px 0;'><a href='{item['url']}' style='color: #0066cc;'>Leia a notícia completa</a></p>")
+                self.news_area.append("<hr style='margin: 15px 0; border: 1px solid #eee;'>")
             self.log("Notícias carregadas com sucesso!")
         except Exception as e:
             self.log(f"Erro ao carregar notícias: {str(e)}")
@@ -159,7 +160,7 @@ class MainWindow(QMainWindow):
             self.chat_input.clear()
             
             try:
-                response = self.chat.send_message([{'role': 'user', 'content': message}])
+                response = self.chat.send_message(message)
                 self.chat_history.append(f"Assistente: {response}")
                 self.log("Resposta recebida com sucesso!")
             except Exception as e:
