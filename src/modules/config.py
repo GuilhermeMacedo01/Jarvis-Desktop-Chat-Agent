@@ -7,7 +7,7 @@ load_dotenv()
 HUGGINGFACE_API_KEY = os.getenv('HUGGINGFACE_API_KEY', '')
 NEWS_API_KEY = os.getenv('NEWS_API_KEY', '')
 
-HUGGINGFACE_ENDPOINT = 'https://api-inference.huggingface.co/models/facebook/blenderbot-400M-distill'
+MODEL_NAME = "facebook/blenderbot-3B"
 NEWS_ENDPOINT = 'https://newsapi.org/v2/everything'
 
 APP_NAME = "Tech Chat & News"
